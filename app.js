@@ -9,10 +9,6 @@ const url = process.env.API_URL;
 app.use(express.urlencoded({ extended: false }));
 app.use(express.json());
 
-app.get("/", (req, res) => {
-	res.send("Hello World");
-});
-
 app.post("/", async (req, res) => {
 	const { youtubeUrl } = req.body;
 	let videoId;
