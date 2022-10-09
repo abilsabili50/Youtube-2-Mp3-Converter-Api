@@ -17,26 +17,32 @@ app.post("/", async (req, res) => {
 	} else if (youtubeUrl.includes("youtu.be/")) {
 		videoId = youtubeUrl.split("youtu.be/")[1];
 	}
-	const fetchApi = await fetch(url + videoId, {
-		method: "GET",
-		headers: {
-			"X-RapidAPI-Key": process.env.API_KEY,
-			"X-RapidAPI-Host": process.env.API_HOST,
-		},
-	});
+	try {
+		const fetchApi = await fetch(url + videoId, {
+			method: "GET",
+			headers: {
+				"X-RapidAPI-Key": process.env.API_KEY,
+				"X-RapidAPI-Host": process.env.API_HOST,
+			},
+		});
 
-	if (!fetchApi)
-		return res
-			.status(400)
-			.send({ status: "fail", message: "Error while converting the url" });
+		if (!fetchApi)
+			return res
+				.status(400)
+				.send({ status: "fail", message: "Error while converting the url" });
 
-	const fetchResponse = await fetchApi.json();
+		const fetchResponse = await fetchApi.json();
 
-	if (fetchResponse.status === "fail") {
-		return res.status(404).send({ status: "fail", message: fetchResponse.msg });
+		if (fetchResponse.status === "fail") {
+			return res
+				.status(404)
+				.send({ status: "fail", message: fetchResponse.msg });
+		}
+
+		return res.send({ status: "success", data: fetchResponse });
+	} catch (error) {
+		res.status(500).send({ status: "fail", message: error.message });
 	}
-
-	return res.send({ status: "success", data: fetchResponse });
 });
 
 app.listen(port, () => {
