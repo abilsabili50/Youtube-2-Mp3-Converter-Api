@@ -1,5 +1,6 @@
 const express = require("express");
 const fetch = require("node-fetch");
+const cors = require("cors");
 require("dotenv").config();
 
 const app = express();
@@ -8,6 +9,7 @@ const url = process.env.API_URL;
 
 app.use(express.urlencoded({ extended: false }));
 app.use(express.json());
+app.use(cors());
 
 app.post("/", async (req, res) => {
 	try {
