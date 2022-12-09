@@ -13,7 +13,7 @@ app.use(cors());
 
 app.post("/", async (req, res) => {
 	try {
-		const fullUrl = req.protocol + "://" + req.hostname + "/";
+		const fullUrl = req.get("referer");
 		const accessibleUrl = process.env.ACCESSIBLE_URL;
 		if (fullUrl != accessibleUrl) {
 			return res.status(403).send({ status: "fail", message: "forbidden" });
