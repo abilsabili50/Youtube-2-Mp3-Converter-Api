@@ -13,6 +13,11 @@ app.use(cors());
 
 app.post("/", async (req, res) => {
 	try {
+		const fullUrl = req.protocol + "://" + req.hostname + "/";
+		const accessibleUrl = process.env.ACCESSIBLE_URL;
+		if (fullUrl != accessibleUrl) {
+			return res.status(403).send({ status: "fail", message: "forbidden" });
+		}
 		const { youtubeUrl } = req.body;
 		let videoId;
 		if (youtubeUrl.includes("youtube.com/watch?v=")) {
